@@ -73,7 +73,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-14">
+    <main className="flex min-h-screen flex-col items-center justify-between p-14 ">
       <main className="flex flex-col space-y-4 shadow-md p-10">
         {/* <div>
           <Image
@@ -89,21 +89,25 @@ export default function Home() {
           activeCategory={activeCategory}
           onClick={handleCategoryClick}
         />
-        <div className="flex space-x-4">
-          <ProductList
-            products={products.filter(
-              (product) => product.category === activeCategory
-            )}
-            onClick={addOrder}
-          />
-          {/* ORDER DETAILS */}
-          <OrderDetails
-            orders={orders}
-            total={total}
-            handleDecrease={handleDecrease}
-            handleIncrease={handleIncrease}
-            handleRemove={handleRemove}
-          />
+        <div className="flex flex-col lg:flex-row lg:space-x-4 sm:space-y-4">
+          <div className="sm:mb-4 lg:mb-0">
+            <ProductList
+              products={products.filter(
+                (product) => product.category === activeCategory
+              )}
+              onClick={addOrder}
+            />
+          </div>
+          <div>
+            {/* ORDER DETAILS */}
+            <OrderDetails
+              orders={orders}
+              total={total}
+              handleDecrease={handleDecrease}
+              handleIncrease={handleIncrease}
+              handleRemove={handleRemove}
+            />
+          </div>
         </div>
       </main>
     </main>

@@ -37,7 +37,7 @@ const OrderDetails = ({
   };
 
   return (
-    <div className="w-96 flex-shrink-0">
+    <div className="w-96">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Your Order</CardTitle>
