@@ -1,5 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+
 // ProductList component
 const ProductList = ({ products, onClick }: any) => {
   return (
@@ -15,10 +17,12 @@ const ProductList = ({ products, onClick }: any) => {
           >
             <Card className="w-full">
               <CardContent>
-                <img
+                <Image
                   src={product.imgSrc}
                   alt="Product Image"
                   className="h-24 w-full"
+                  width={86}
+                  height={86}
                 />
                 <div className="text-center">
                   <p className="text-xs">{product.name}</p>

@@ -12,6 +12,7 @@ import {
 
 import { Item } from "@/lib/Types";
 import { Input } from "../ui/input";
+import Image from "next/image";
 
 const OrderDetails = ({
   orders,
@@ -49,7 +50,7 @@ const OrderDetails = ({
               orders.map((order: any, index: number) => (
                 <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <img
+                    <Image
                       src={order.imgSrc}
                       alt="Product Image"
                       width={40}
