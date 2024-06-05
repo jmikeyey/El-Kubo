@@ -74,7 +74,7 @@ export default function Component() {
   };
   return (
     <main className="flex flex-col space-y-4 shadow-md p-10">
-      <div>
+      {/* <div>
         <Image
           src="/5954169.jpg"
           alt="Promo Image"
@@ -82,7 +82,7 @@ export default function Component() {
           height={200}
           style={{ objectFit: "cover" }}
         />
-      </div>
+      </div> */}
       <CategoryMenu
         categories={categories}
         activeCategory={activeCategory}
