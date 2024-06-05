@@ -9,3 +9,6 @@ export interface Item {
   imgSrc: string;
   category: "beverage" | "coffee" | "pastries";
 }
+export interface Orders extends Partial<Item> {
+  quantity: number;
+}
