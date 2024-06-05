@@ -1,13 +1,11 @@
-export interface Orders {
-  items: OrdersDetails[];
-  subtotal: number;
-  shipping: number;
-  total: number;
+export interface Items {
+  items: Item[];
 }
 
-export interface OrdersDetails {
-  image: string;
+export interface Item {
+  id: number;
   name: string;
-  quantity: number;
   price: number;
+  imgSrc: string;
+  category: "beverage" | "coffee" | "pastries";
 }
