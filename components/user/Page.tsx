@@ -10,10 +10,6 @@ import OrderDetails from "@/components/products/OrderDetails";
 import { Item, Orders, ProductInOrder } from "@/lib/Types";
 
 export default function Home() {
-  if (!checkRole("user")) {
-    redirect("/");
-  }
-
   const [order, setOrder] = useState<Orders | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("beverage");
 
