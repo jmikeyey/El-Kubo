@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main className="max-h-full h-full bg-green-50">{children}</main>
+        <main className="bg-green-50">{children}</main>
       </body>
     </html>
   );

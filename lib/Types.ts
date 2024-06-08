@@ -9,6 +9,13 @@ export interface Item {
   imgSrc: string;
   category: "beverage" | "coffee" | "pastries";
 }
-export interface Orders extends Partial<Item> {
+export interface ProductInOrder extends Partial<Item> {
   quantity: number;
+}
+
+export interface Orders {
+  orderId: number;
+  status: "On Queue" | "Preparing" | "To Serve" | "Done";
+  products: ProductInOrder[];
+  total: number;
 }
