@@ -34,3 +34,21 @@ export async function POST(req: Request) {
     return new NextResponse("Internal server Error", { status: 500 });
   }
 }
+
+export async function GET(
+  req: Request,
+  { params }: { params: { storeId: string } }
+) {
+  try {
+    const category = await prismadb.category.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json(category);
+  } catch (error) {
+    console.log("[BILLBOARDS_GET]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
