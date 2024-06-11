@@ -3,11 +3,11 @@ export interface Items {
 }
 
 export interface Item {
-  id: number;
+  id: string;
   name: string;
   price: number;
   imgSrc: string;
-  category: "beverage" | "coffee" | "pastries";
+  category: string;
 }
 export interface ProductInOrder extends Partial<Item> {
   quantity: number;
