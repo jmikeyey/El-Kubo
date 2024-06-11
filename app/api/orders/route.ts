@@ -66,7 +66,11 @@ export async function GET(req: Request) {
       include: {
         orderItems: {
           include: {
-            product: true,
+            product: {
+              include: {
+                images: true,
+              },
+            },
           },
         },
       },
