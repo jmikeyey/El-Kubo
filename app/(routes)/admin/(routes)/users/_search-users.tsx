@@ -1,6 +1,17 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { usePathname, useRouter } from "next/navigation";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export const SearchUsers = () => {
   const router = useRouter();
@@ -8,35 +19,31 @@ export const SearchUsers = () => {
 
   return (
     <div className="flex justify-center items-center mb-6">
-      <form
-        className="w-full max-w-md p-4 bg-white shadow-md rounded"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const form = e.currentTarget;
-          const formData = new FormData(form);
-          const queryTerm = formData.get("search") as string;
-          router.push(pathname + "?search=" + queryTerm);
-        }}
-      >
-        <label
-          htmlFor="search"
-          className="block text-gray-700 text-sm font-bold mb-2"
-        >
-          Search for Users
-        </label>
-        <input
-          id="search"
-          name="search"
-          type="text"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-        <button
-          type="submit"
-          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-        >
-          Search
-        </button>
-      </form>
+      <Card className="w-[550px] pt-6">
+        <CardContent>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const form = e.currentTarget;
+              const formData = new FormData(form);
+              const queryTerm = formData.get("search") as string;
+              router.push(pathname + "?search=" + queryTerm);
+            }}
+          >
+            <div className="flex">
+              <Input
+                id="search"
+                name="search"
+                type="text"
+                placeholder="user@email.com"
+              />
+              <Button type="submit" variant="ghost">
+                Search
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
