@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+import Timer from "./Timer";
 interface OrderCardProps {
   order: Orders;
   onStatusChange: (
@@ -47,7 +47,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange }) => {
     >
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-lg font-bold">Order #{order.orderId}</h3>
-        <p className="text-sm mb-2">Status: {order.status}</p>
+        <div className="flex flex-col">
+          <p className="text-sm mb-2">Status: {order.status}</p>
+          <Timer time={order.createdAt} />
+        </div>
         {order.status !== "To Serve" && (
           <Button onClick={handleStatusChange}>Next Status</Button>
         )}

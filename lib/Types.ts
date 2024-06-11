@@ -15,6 +15,7 @@ export interface ProductInOrder extends Partial<Item> {
 
 export interface Orders {
   orderNumber?: number;
+  createdAt?: string;
   orderId: number;
   status: "On Queue" | "Preparing" | "To Serve" | "Done";
   products: ProductInOrder[];

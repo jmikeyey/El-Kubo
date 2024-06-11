@@ -41,6 +41,7 @@ const KitchenPage = async () => {
       return {
         orderNumber: order.id,
         orderId: order.orderNumber,
+        createdAt: order.createdAt,
         status: order.status as Orders["status"],
         products,
         total: parseFloat(order.total),
