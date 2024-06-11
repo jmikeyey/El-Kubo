@@ -53,7 +53,7 @@ model Order {
   id String @id @default(uuid())
   orderItems OrderItem[]
   isPaid Boolean @default(false)
-  quantity Int
+  status String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -65,6 +65,7 @@ model OrderItem {
   order Order @relation(fields: [orderId], references: [id])
   productId String
   product Product @relation(fields: [productId], references: [id])
+  quantity Int
 
 @@index([orderId])
 @@index([productId])
