@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,80 +9,122 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-// OrderDetails component
-
-import { Item } from "@/lib/Types";
-import { Input } from "../ui/input";
+import { Orders } from "@/lib/Types";
+import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
-const OrderDetails = ({
-  orders,
-  total,
+import toast from "react-hot-toast";
+
+import { Loader2 } from "lucide-react";
+import axios from "axios";
+interface OrderDetailsProps {
+  order: Orders | null;
+  handleDecrease: (id: string) => void;
+  handleIncrease: (id: string) => void;
+  handleRemove: (id: string) => void;
+  resetOrder: () => void;
+}
+
+const OrderDetails: React.FC<OrderDetailsProps> = ({
+  order,
   handleDecrease,
   handleIncrease,
   handleRemove,
-}: any) => {
+  resetOrder,
+}) => {
   const [amountPaid, setAmountPaid] = useState<number>(0);
   const [change, setChange] = useState<number>(0);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [orderNumber, setOrderNumber] = useState(0);
   useEffect(() => {
     const calculateChange = () => {
-      const change = amountPaid - total;
-      return change;
+      const changeAmount = amountPaid - (order?.total ?? 0);
+      return changeAmount;
     };
 
     setChange(calculateChange());
-  }, [amountPaid, total]);
+  }, [amountPaid, order]);
 
-  const handleCreateOrder = () => {
-    // onCreateOrder(selectedItems);
+  const handleCreateOrder = async () => {
+    try {
+      setLoading(true);
+      console.log(order);
+      const response = await axios.post(`/api/orders`, order);
+      console.log("Response from API:", response.data);
+      setOrderNumber(response.data.orderId);
+      toast.success("Order created successfully");
+    } catch (error) {
+      toast.error("Failed to create order");
+    } finally {
+      setLoading(false);
+      setIsDialogOpen(true);
+    }
+  };
+  const closeViewOrder = () => {
+    setIsDialogOpen(false);
+    resetOrder();
+    setAmountPaid(0);
+    setChange(0);
   };
 
   return (
-    <div className="w-96">
+    <div className="w-80">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Your Order</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {orders.length === 0 ? (
+            {!order || order.products.length === 0 ? (
               <p>No orders</p>
             ) : (
-              orders.map((order: any, index: number) => (
+              order.products.map((product, index) => (
                 <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Image
-                      src={order.imgSrc}
+                      src={product.imgSrc ?? ""}
                       alt="Product Image"
                       width={40}
                       height={40}
                       className="rounded-md"
                     />
                     <div>
-                      <p className="font-medium">{order.name}</p>
-                      <p className="text-sm text-gray-500">₱{order.price}.00</p>
+                      <p className="font-medium text-sm">{product.name}</p>
+                      <p className="text-xs text-gray-500">
+                        ₱{product.price}.00
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDecrease(order.id)}
+                      onClick={() => handleDecrease(product.id!)}
                     >
                       <MinusIcon className="h-4 w-4" />
                     </Button>
-                    <p>{order.quantity}</p>
+                    <p>{product.quantity}</p>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleIncrease(order.id)}
+                      onClick={() => handleIncrease(product.id!)}
                     >
                       <PlusIcon className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleRemove(order.id)}
+                      onClick={() => handleRemove(product.id!)}
                     >
                       <TrashIcon className="h-4 w-4" />
                     </Button>
@@ -93,7 +136,7 @@ const OrderDetails = ({
         </CardContent>
         <CardFooter className="flex items-center justify-between">
           <p className="font-medium">Total</p>
-          <p className="font-medium">₱{total}.00</p>
+          <p className="font-medium">₱{order?.total}.00</p>
         </CardFooter>
         <CardFooter>
           <div className="flex justify-between flex-col">
@@ -103,11 +146,11 @@ const OrderDetails = ({
                 type="number"
                 value={amountPaid}
                 onChange={(e) => setAmountPaid(parseInt(e.target.value))}
-                disabled={orders.length === 0}
+                disabled={!order || order.products.length === 0}
               />
             </div>
 
-            <div className="mt-2 ">
+            <div className="mt-2">
               <p className="font-medium">Change:</p>
               <p
                 className={`font-medium ${
@@ -124,13 +167,74 @@ const OrderDetails = ({
           </div>
         </CardFooter>
         <CardFooter>
-          <Button
-            className="w-full"
-            onClick={handleCreateOrder}
-            disabled={change < 0}
-          >
-            Create Order
-          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                className="w-full"
+                onClick={handleCreateOrder}
+                disabled={change < 0 || isDialogOpen || order === null}
+              >
+                {loading
+                  ? `
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  `
+                  : isDialogOpen
+                  ? "Viewing Order"
+                  : "Create Order"}
+              </Button>
+            </DialogTrigger>
+            {/* DIALOG */}
+            <DialogContent className="max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>
+                  Order Details <p>#{orderNumber}</p>
+                </DialogTitle>
+                <DialogDescription>
+                  Here are the details of your order:
+                </DialogDescription>
+              </DialogHeader>
+              {order?.products.map((product, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between mb-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={product.imgSrc ?? "default.png"}
+                      alt="Product Image"
+                      width={40}
+                      height={40}
+                      className="rounded-md"
+                    />
+                    <div>
+                      <p className="font-medium">{product.name}</p>
+                      <p className="text-sm text-gray-500">
+                        ₱{product.price}.00
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Quantity: {product.quantity}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <div className="mt-4">
+                <p className="font-medium">Total: ₱{order?.total}.00</p>
+                <p className="font-medium">Amount Paid: ₱{amountPaid}.00</p>
+                <p className="font-medium">Change: ₱{change}.00</p>
+              </div>
+              <DialogFooter>
+                <Button
+                  onClick={closeViewOrder}
+                  className="w-full"
+                  disabled={loading}
+                >
+                  Close
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </CardFooter>
       </Card>
     </div>

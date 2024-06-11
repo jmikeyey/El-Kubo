@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "../styles/globals.css";
+import "./globals.css";
+
+import { ClerkProvider } from "@clerk/nextjs";
+
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { ToasterProvider } from "@/providers/toast-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "El Kubo",
-  description:
-    "El-Kubo Grill & Resto Bar -- We serve Chicken Inasal with Unlimited Rice, Beverages are also be offered",
+  title: "EL KUBO",
+  description: "EL KUBO",
 };
 
 export default function RootLayout({
@@ -16,10 +21,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <main className="max-h-full h-full bg-green-50">{children}</main>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <ToasterProvider />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
