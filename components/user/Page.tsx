@@ -105,7 +105,9 @@ export default function Home(props: Props) {
       setOrder(newOrder);
     }
   };
-
+  const resetOrder = () => {
+    setOrder(null);
+  };
   return (
     <>
       {/* <UserButton afterSignOutUrl="/" /> */}
@@ -131,6 +133,7 @@ export default function Home(props: Props) {
               handleDecrease={handleDecrease}
               handleIncrease={handleIncrease}
               handleRemove={handleRemove}
+              resetOrder={resetOrder}
             />
           </div>
         </div>

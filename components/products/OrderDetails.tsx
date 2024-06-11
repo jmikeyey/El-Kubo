@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +21,17 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+
+import toast from "react-hot-toast";
+
+import { Loader2 } from "lucide-react";
+import axios from "axios";
 interface OrderDetailsProps {
   order: Orders | null;
   handleDecrease: (id: string) => void;
   handleIncrease: (id: string) => void;
   handleRemove: (id: string) => void;
+  resetOrder: () => void;
 }
 
 const OrderDetails: React.FC<OrderDetailsProps> = ({
@@ -32,10 +39,13 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({
   handleDecrease,
   handleIncrease,
   handleRemove,
+  resetOrder,
 }) => {
   const [amountPaid, setAmountPaid] = useState<number>(0);
   const [change, setChange] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [orderNumber, setOrderNumber] = useState(0);
   useEffect(() => {
     const calculateChange = () => {
       const changeAmount = amountPaid - (order?.total ?? 0);
@@ -45,9 +55,28 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({
     setChange(calculateChange());
   }, [amountPaid, order]);
 
-  const handleCreateOrder = () => {
-    setIsDialogOpen(true);
+  const handleCreateOrder = async () => {
+    try {
+      setLoading(false);
+      console.log(order);
+      const response = await axios.post(`/api/orders`, order);
+      console.log("Response from API:", response.data);
+      setOrderNumber(response.data.orderId);
+      toast.success("Order created successfully");
+    } catch (error) {
+      toast.error("Failed to create order");
+    } finally {
+      setLoading(false);
+      setIsDialogOpen(true);
+    }
   };
+  const closeViewOrder = () => {
+    setIsDialogOpen(false);
+    resetOrder();
+    setAmountPaid(0);
+    setChange(0);
+  };
+
   return (
     <div className="w-80">
       <Card className="w-full">
@@ -145,14 +174,21 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({
                 onClick={handleCreateOrder}
                 disabled={change < 0 || isDialogOpen || order === null}
               >
-                {isDialogOpen ? "Viewing Order" : "Create Order"}
+                {loading
+                  ? `
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  `
+                  : isDialogOpen
+                  ? "Viewing Order"
+                  : "Create Order"}
               </Button>
             </DialogTrigger>
             {/* DIALOG */}
             <DialogContent className="max-h-[80vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
-                  Order Details <p>#{order?.orderId}</p>
+                  Order Details <p>#{orderNumber}</p>
                 </DialogTitle>
                 <DialogDescription>
                   Here are the details of your order:
@@ -189,10 +225,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({
                 <p className="font-medium">Change: ₱{change}.00</p>
               </div>
               <DialogFooter>
-                <Button
-                  onClick={() => setIsDialogOpen(false)}
-                  className="w-full"
-                >
+                <Button onClick={closeViewOrder} className="w-full">
                   Close
                 </Button>
               </DialogFooter>
