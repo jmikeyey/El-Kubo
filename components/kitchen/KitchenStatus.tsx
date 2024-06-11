@@ -59,7 +59,7 @@ const initialOrders: Orders[] = [
     status: "On Queue",
     products: [
       {
-        id: 1,
+        id: "1",
         name: "Latte",
         price: 120.0,
         imgSrc: "/latte.svg",
@@ -67,7 +67,7 @@ const initialOrders: Orders[] = [
         quantity: 1,
       },
       {
-        id: 2,
+        id: "2",
         name: "Croissant",
         price: 50.0,
         imgSrc: "/croissant.svg",
@@ -82,7 +82,7 @@ const initialOrders: Orders[] = [
     status: "Preparing",
     products: [
       {
-        id: 3,
+        id: "3",
         name: "Espresso",
         price: 100.0,
         imgSrc: "/espresso.svg",
