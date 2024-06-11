@@ -25,8 +25,12 @@ const ProductList = ({ products, onClick }: any) => {
                   height={86}
                 />
                 <div className="text-center">
-                  <p className="text-xs">{product.name}</p>
-                  <p className="text-sm">{product.price}</p>
+                  <p className="text-xs font-medium tracking-tight">
+                    {product.name}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {product.price}
+                  </p>
                 </div>
               </CardContent>
             </Card>
