@@ -1,21 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { redirect } from "next/navigation";
-import { UserButton } from "@clerk/nextjs";
-import { checkRole } from "@/utils/roles";
 import CategoryMenu from "@/components/products/CategoryMenu";
 import ProductList from "@/components/products/ProductList";
 import OrderDetails from "@/components/products/OrderDetails";
 import { Item, Orders, ProductInOrder } from "@/lib/Types";
 
-export default function Home() {
+interface Props {
+  category: string[];
+  products: Item[];
+}
+
+export default function Home(props: Props) {
+  const { category, products } = props;
+
   const [order, setOrder] = useState<Orders | null>(null);
-  const [activeCategory, setActiveCategory] = useState<string>("beverage");
+  const [activeCategory, setActiveCategory] = useState<string>(category[0]);
+  const categories = category;
 
-  const categories = ["beverage", "pastries", "coffee"];
-
-  const handleIncrease = (id: number) => {
+  const handleIncrease = (id: string) => {
     if (order) {
       const updatedProducts = order.products.map((product) =>
         product.id === id
@@ -30,7 +33,7 @@ export default function Home() {
     }
   };
 
-  const handleDecrease = (id: number) => {
+  const handleDecrease = (id: string) => {
     if (order) {
       const updatedProducts = order.products.map((product) =>
         product.id === id && product.quantity! > 1
@@ -45,7 +48,7 @@ export default function Home() {
     }
   };
 
-  const handleRemove = (id: number) => {
+  const handleRemove = (id: string) => {
     if (order) {
       const updatedProducts = order.products.filter(
         (product) => product.id !== id
@@ -102,6 +105,7 @@ export default function Home() {
       setOrder(newOrder);
     }
   };
+
   return (
     <>
       {/* <UserButton afterSignOutUrl="/" /> */}
@@ -134,167 +138,3 @@ export default function Home() {
     </>
   );
 }
-
-const products: Item[] = [
-  {
-    id: 1,
-    name: "Caramel Macchiato",
-    price: 150.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 2,
-    name: "Maple Cinnamon",
-    price: 160.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 3,
-    name: "Chocolate Frappe",
-    price: 140.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 4,
-    name: "Vanilla Coffee",
-    price: 120.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 5,
-    name: "Caramel Frappe",
-    price: 130.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 6,
-    name: "Cookie Crumble",
-    price: 140.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 7,
-    name: "Iced Shaken Espresso",
-    price: 100.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 8,
-    name: "Golden Foam Latte",
-    price: 110.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 9,
-    name: "Classic Brew",
-    price: 100.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 10,
-    name: "Cafe Latte",
-    price: 120.0,
-    imgSrc: "/placeholder.svg",
-    category: "beverage",
-  },
-  {
-    id: 11,
-    name: "Croissant",
-    price: 50.0,
-    imgSrc: "/croissant.svg",
-    category: "pastries",
-  },
-  {
-    id: 12,
-    name: "Blueberry Muffin",
-    price: 60.0,
-    imgSrc: "/blueberry_muffin.svg",
-    category: "pastries",
-  },
-  {
-    id: 13,
-    name: "Cinnamon Roll",
-    price: 70.0,
-    imgSrc: "/cinnamon_roll.svg",
-    category: "pastries",
-  },
-  {
-    id: 14,
-    name: "Bagel",
-    price: 55.0,
-    imgSrc: "/bagel.svg",
-    category: "pastries",
-  },
-  {
-    id: 15,
-    name: "Plain Donut",
-    price: 40.0,
-    imgSrc: "/plain_donut.svg",
-    category: "pastries",
-  },
-  {
-    id: 16,
-    name: "Chocolate Chip Cookie",
-    price: 45.0,
-    imgSrc: "/chocolate_chip_cookie.svg",
-    category: "pastries",
-  },
-  {
-    id: 17,
-    name: "Black Coffee",
-    price: 80.0,
-    imgSrc: "/black_coffee.svg",
-    category: "coffee",
-  },
-  {
-    id: 18,
-    name: "Espresso",
-    price: 90.0,
-    imgSrc: "/espresso.svg",
-    category: "coffee",
-  },
-  {
-    id: 19,
-    name: "Latte",
-    price: 100.0,
-    imgSrc: "/latte.svg",
-    category: "coffee",
-  },
-  {
-    id: 20,
-    name: "Cappuccino",
-    price: 110.0,
-    imgSrc: "/cappuccino.svg",
-    category: "coffee",
-  },
-  {
-    id: 21,
-    name: "Mocha",
-    price: 120.0,
-    imgSrc: "/mocha.svg",
-    category: "coffee",
-  },
-  {
-    id: 22,
-    name: "Iced Coffee",
-    price: 90.0,
-    imgSrc: "/iced_coffee.svg",
-    category: "coffee",
-  },
-  {
-    id: 23,
-    name: "Cold Brew",
-    price: 100.0,
-    imgSrc: "/cold_brew.svg",
-    category: "coffee",
-  },
-];

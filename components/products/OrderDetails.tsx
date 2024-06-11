@@ -22,9 +22,9 @@ import {
 } from "@/components/ui/dialog";
 interface OrderDetailsProps {
   order: Orders | null;
-  handleDecrease: (id: number) => void;
-  handleIncrease: (id: number) => void;
-  handleRemove: (id: number) => void;
+  handleDecrease: (id: string) => void;
+  handleIncrease: (id: string) => void;
+  handleRemove: (id: string) => void;
 }
 
 const OrderDetails: React.FC<OrderDetailsProps> = ({
