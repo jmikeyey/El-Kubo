@@ -1,6 +1,8 @@
 import { Orders, ProductInOrder } from "@/lib/Types";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 interface OrderCardProps {
   order: Orders;
@@ -11,13 +13,30 @@ interface OrderCardProps {
 }
 
 const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusChange }) => {
-  const handleStatusChange = () => {
+  const handleStatusChange = async () => {
+    let status: any;
+    console.log(order.orderNumber);
     if (order.status === "On Queue") {
-      onStatusChange(order.orderId, "Preparing");
+      status = "Preparing";
     } else if (order.status === "Preparing") {
-      onStatusChange(order.orderId, "To Serve");
+      status = "To Serve";
     } else if (order.status === "To Serve") {
-      onStatusChange(order.orderId, "Done");
+      status = "Done";
+    }
+
+    try {
+      const response = await axios.put(
+        `/api/orders/${order.orderNumber}/${status}`
+      );
+      console.log(response.data);
+
+      // Update the status if the request was successful
+      if (response.status === 200) {
+        onStatusChange(order.orderId, status);
+        toast.success(`Order is now ${status}`);
+      }
+    } catch (error) {
+      toast.error("Failed to update order status");
     }
   };
 

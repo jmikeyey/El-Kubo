@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { Orders } from "@/lib/Types";
 import OrderCard from "@/components/kitchen/OrderCard";
 
-const KitchenStatus = () => {
-  const [orders, setOrders] = useState<Orders[]>(initialOrders);
+const KitchenStatus = (props: any) => {
+  const { ordersData } = props;
+  console.log(ordersData);
+  const [orders, setOrders] = useState<Orders[]>(ordersData);
 
   const handleStatusChange = (
     orderId: number,
