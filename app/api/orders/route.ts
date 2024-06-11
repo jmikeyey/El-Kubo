@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     // Determine the new order number
     let newOrderNumber = 1;
     if (maxOrder.length > 0) {
-      newOrderNumber = parseInt(maxOrder[0].orderNumber) + 1;
+      newOrderNumber = maxOrder[0].orderNumber + 1;
     }
 
     // Create the order
