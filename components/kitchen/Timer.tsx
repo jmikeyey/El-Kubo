@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Badge } from "../ui/badge";
+import clsx from "clsx";
 
 interface TimerProps {
   time: string | undefined;
@@ -8,7 +8,8 @@ interface TimerProps {
 
 const Timer: React.FC<TimerProps> = ({ time }) => {
   const [elapsedTime, setElapsedTime] = useState<string>("");
-  const [badgeColor, setBadgeColor] = useState<string>("");
+  const [badgeColor, setBadgeColor] = useState<string>("bg-green-400");
+
   useEffect(() => {
     if (!time) return;
 
@@ -21,16 +22,17 @@ const Timer: React.FC<TimerProps> = ({ time }) => {
       const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
 
-      let color = "green";
+      let colorClass = "bg-green-400";
       if (minutes < 5) {
-        color = "green";
+        colorClass = "bg-green-400";
       } else if (minutes < 10) {
-        color = "yellow";
+        colorClass = "bg-yellow-400";
       } else {
-        color = "red";
+        colorClass = "bg-red-400";
       }
 
-      setBadgeColor(color);
+      setBadgeColor(colorClass);
+
       const formattedTime =
         hours > 0
           ? `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
@@ -54,7 +56,9 @@ const Timer: React.FC<TimerProps> = ({ time }) => {
   return (
     <>
       <span className="text-sm mb-2">
-        <span className={`bg-${badgeColor}-400 text-black rounded-full px-2`}>
+        <span
+          className={clsx(badgeColor, "text-black", "rounded-full", "px-2")}
+        >
           +{elapsedTime}
         </span>
       </span>
