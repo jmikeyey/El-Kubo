@@ -16,20 +16,15 @@ const ProductsPage = async () => {
     },
   });
 
-  const formattedProducts: ProductColumn[] = products.map((item) => {
-    const imageUrl = item.images.length > 0 ? item.images[0].url : ""; // Use the URL of the first image if available
-
-    return {
-      id: item.id,
-      name: item.name,
-      isArchived: item.isArchived,
-      price: formatter.format(item.price.toNumber()),
-      image: imageUrl,
-      category: item.category ? item.category.name : "",
-      createdAt: format(item.createdAt, "MMM do, yyyy"),
-    };
-  });
-  console.log(formattedProducts);
+  const formattedProducts: ProductColumn[] = products.map((item) => ({
+    id: item.id,
+    name: item.name,
+    isArchived: item.isArchived,
+    price: formatter.format(item.price.toNumber()),
+    image: item.images[0].url,
+    category: item.category ? item.category.name : "",
+    createdAt: format(item.createdAt, "MMM do, yyyy"),
+  }));
 
   return (
     <div className="flex-col">
