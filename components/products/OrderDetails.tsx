@@ -57,7 +57,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({
 
   const handleCreateOrder = async () => {
     try {
-      setLoading(false);
+      setLoading(true);
       console.log(order);
       const response = await axios.post(`/api/orders`, order);
       console.log("Response from API:", response.data);
@@ -225,7 +225,11 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({
                 <p className="font-medium">Change: ₱{change}.00</p>
               </div>
               <DialogFooter>
-                <Button onClick={closeViewOrder} className="w-full">
+                <Button
+                  onClick={closeViewOrder}
+                  className="w-full"
+                  disabled={loading}
+                >
                   Close
                 </Button>
               </DialogFooter>
