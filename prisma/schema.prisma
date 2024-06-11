@@ -51,6 +51,7 @@ model Image {
 
 model Order {
   id String @id @default(uuid())
+  orderNumber Int
   orderItems OrderItem[]
   isPaid Boolean @default(false)
   status String
