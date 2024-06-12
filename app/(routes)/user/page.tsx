@@ -5,9 +5,9 @@ import prismadb from "@/lib/prismadb";
 import { UserButton } from "@clerk/nextjs";
 
 export default async function Home() {
-  // if (!checkRole("user")) {
-  //   redirect("/");
-  // }
+  if (!checkRole("user")) {
+    redirect("/");
+  }
   const categories = await prismadb.category.findMany({
     orderBy: {
       createdAt: "desc",
